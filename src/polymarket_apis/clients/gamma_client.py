@@ -96,9 +96,12 @@ class PolymarketGammaClient:
         response.raise_for_status()
         return SearchResult(**response.json())
 
-    def get_market(self, market_id: str) -> GammaMarket:
+    def get_market(self, market_id: str, include_tag: Optional[bool] = None) -> GammaMarket:
         """Get a GammaMarket by market_id."""
-        response = self.client.get(self._build_url(f"/markets/{market_id}"))
+        params = {}
+        if include_tag:
+            params["include_tag"] = include_tag
+        response = self.client.get(self._build_url(f"/markets/{market_id}"), params=params)
         response.raise_for_status()
         return GammaMarket(**response.json())
 
@@ -125,6 +128,7 @@ class PolymarketGammaClient:
         start_date_max: datetime | None = None,
         end_date_min: datetime | None = None,
         end_date_max: datetime | None = None,
+        include_tag: Optional[bool] = None,
     ) -> list[GammaMarket]:
         params: dict[str, float | int | list[int] | str | list[str] | bool] = {}
         if limit:
@@ -168,7 +172,8 @@ class PolymarketGammaClient:
             params["tag_id"] = tag_id
             if related_tags:
                 params["related_tags"] = related_tags
-
+        if include_tag:
+            params["include_tag"] = include_tag
         response = self.client.get(self._build_url("/markets"), params=params)
         response.raise_for_status()
         return [GammaMarket(**market) for market in response.json()]
