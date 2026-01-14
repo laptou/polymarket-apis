@@ -229,6 +229,7 @@ class PolymarketGammaClient:
         tag: Optional[str] = None,
         tag_id: Optional[int] = None,
         tag_slug: Optional[str] = None,
+        exclude_tag_id: Optional[list[int]] = None,
         related_tags: bool = False,
     ) -> list[Event]:
         params: dict[str, int | str | list[str] | float] = {
@@ -272,6 +273,8 @@ class PolymarketGammaClient:
                 params["related_tags"] = related_tags
         elif tag_slug:
             params["tag_slug"] = tag_slug
+        if exclude_tag_id:
+            params["exclude_tag_id"] = [str(tag_id) for tag_id in exclude_tag_id]
 
         response = self.client.get(self._build_url("/events"), params=params)
         response.raise_for_status()
@@ -297,6 +300,7 @@ class PolymarketGammaClient:
         tag: Optional[str] = None,
         tag_id: Optional[int] = None,
         tag_slug: Optional[str] = None,
+        exclude_tag_id: Optional[list[int]] = None,
         related_tags: bool = False,
     ) -> list[Event]:
         offset = 0
@@ -323,6 +327,7 @@ class PolymarketGammaClient:
                 tag=tag,
                 tag_id=tag_id,
                 tag_slug=tag_slug,
+                exclude_tag_id=exclude_tag_id,
                 related_tags=related_tags,
             )
             events.extend(part)
