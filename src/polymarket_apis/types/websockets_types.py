@@ -89,7 +89,7 @@ class OrderEvent(BaseModel):
     event_type: Optional[Literal["order"]] = None
     type: Literal["PLACEMENT", "UPDATE", "CANCELLATION"]
 
-    status: Literal["LIVE", "CANCELED", "MATCHED"]
+    status: Literal["LIVE", "CANCELED", "MATCHED", "CANCELED_MARKET_RESOLVED"]
 
     @field_validator("expiration", mode="before")
     def validate_expiration(cls, v):
