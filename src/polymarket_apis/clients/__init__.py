@@ -1,8 +1,11 @@
 """
-Client modules for Polymarket APIs.
+client modules for polymarket apis.
 
-This module contains all the client classes for interacting with different
-Polymarket APIs including CLOB, Data, Gamma, GraphQL, Web3, and WebSocket clients.
+all clients provide both sync and async methods:
+- sync methods: get_*, post_*, create_*, etc.
+- async methods: aget_*, apost_*, acreate_*, etc.
+
+async methods enable easy parallelization via asyncio.gather().
 """
 
 from .clob_client import PolymarketClobClient
@@ -10,15 +13,27 @@ from .data_client import PolymarketDataClient
 from .gamma_client import PolymarketGammaClient
 from .graphql_client import AsyncPolymarketGraphQLClient, PolymarketGraphQLClient
 from .web3_client import PolymarketGaslessWeb3Client, PolymarketWeb3Client
-from .websockets_client import PolymarketWebsocketsClient
+from .websockets_client import (
+    PolymarketWebsocketsClient,
+    parse_live_data_event,
+    parse_market_event,
+    parse_user_event,
+)
 
 __all__ = [
+    # graphql clients
     "AsyncPolymarketGraphQLClient",
+    "PolymarketGraphQLClient",
+    # main api clients
     "PolymarketClobClient",
     "PolymarketDataClient",
     "PolymarketGammaClient",
+    # web3 clients
     "PolymarketGaslessWeb3Client",
-    "PolymarketGraphQLClient",
     "PolymarketWeb3Client",
+    # websocket client and helpers
     "PolymarketWebsocketsClient",
+    "parse_live_data_event",
+    "parse_market_event",
+    "parse_user_event",
 ]
